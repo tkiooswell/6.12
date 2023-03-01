@@ -1,0 +1,174 @@
+#pragma once
+#include <Windows.h>
+#include <iostream>
+using namespace std;
+class Person
+{
+private:
+	char* name = new char[125];
+	char* surname = new char[125];
+	int age;
+public:
+	Person(char* name, char* surname, int age){
+		this->name = name;
+		this->surname = surname;
+		this->age = age;
+	}
+	Person() {};
+
+	void PrintPerson() {
+		cout << "Name - " << name << endl;
+		cout << "Surname - " << surname << endl;
+		cout << "Age - " << age << endl;
+	}
+	void NewPerson() {
+		cout << "Enter a name\n";
+		setName();
+		cout << "Enter a surname\n";
+		setSurname();
+		cout << "Enter an age\n";
+		setAge();
+	}
+
+	char* getName() {
+		return name;
+	}
+	char* getSurname() {
+		return surname;
+	}
+	int getAge() {
+		return age;
+	}
+
+	
+	void setName() {
+		cin >> name;
+	}
+	void setSurname() {
+		cin >> surname;
+	}
+	void setAge() {
+		cin >> age;
+	}
+
+	~Person() {
+		delete[]name;
+		delete[]surname;
+	}
+};
+
+
+#pragma once
+#include <Windows.h>
+#include <iostream>
+#include "Person.h"
+
+using namespace std;
+
+class Apartment
+{
+private:
+	int size;
+	Person* residents;
+public:
+	Apartment(int size, Person* arr) {
+		this->size = size;
+		residents = new Person[size];
+		residents = arr;
+	}
+	Apartment() {
+		size = 0;
+		residents = new Person[size];
+	}
+
+	void PrintPersons() {
+		for (int i = 0; i < size; i++) {
+			residents[i].PrintPerson();
+			cout << endl;
+		}
+	}
+	void AddPerson() {
+		size++;
+		Person* tempRes = new Person[size];
+		for (int i = 0; i < size - 1; i++) {
+			tempRes[i] = residents[i];
+		}
+		tempRes[size - 1].NewPerson();
+		delete[] residents;
+		residents = new Person[size];
+		residents = tempRes;
+	}
+	void PrintNumbers() {
+	cout << "Numbers of apartments:\n";
+		for (int i = 0; i < size; i++) {
+			cout  << i + 1 ;
+		}
+	}
+
+	int getSize() {
+		return size;
+	}
+	Person* getResidents() {
+		return residents;
+	}
+
+
+	~Apartment() {
+		delete[] residents;
+	}
+    
+};
+
+#pragma once
+#include <Windows.h>
+#include <iostream>
+#include "Person.h"
+#include "Apartment.h"
+
+using namespace std;
+class Floor
+{
+private:
+	int size = 0;
+	Apartment* list;
+public:
+	Floor(int size, Apartment* arr) {
+		this->size = size;
+		list = new Apartment[size];
+		list = arr;
+	}
+	Floor() {
+		size = 0;
+		list = new Apartment[size];
+	}
+
+	void PrintApartment() {
+		for (int i = 0; i < size; i++) {
+			cout << "Number of apartment - " << i + 1 << endl;
+			cout << "Persons: \n";
+			list[i].PrintPersons();
+		}
+	}
+	void AddApartmentAndPerson() {
+		size++;
+		Apartment* tempList = new Apartment[size];
+		for (int i = 0; i < size - 1; i++) {
+			tempList[i] = list[i];
+		}
+		tempList[size - 1].AddPerson();
+		delete[] list;
+		list = new Apartment[size];
+		list = tempList;
+	}
+	
+	int getSize() {
+		return size;
+	}
+	Apartment* getList() {
+		return list;
+	}
+
+	~Floor() {
+		delete[] list;
+	}
+};
